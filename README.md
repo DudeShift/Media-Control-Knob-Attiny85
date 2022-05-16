@@ -1,14 +1,23 @@
 # Media Control Knob Attiny85
-A Attiny85 powering Printables (Prusaprints) Media Control Knob that works as a HID. 
+A Attiny85 powering Printables (Prusaprints) Media Control Knob that can act as a HID (can act as keyboard or mouse)
 (If you are reading this, its still a work in progress)
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+This project builds off of [Mikolas Zuza Media Control Volume Knob](https://blog.prusa3d.com/3d-print-an-oversized-media-control-volume-knob-arduino-basics_30184/) but using a Attiny85 to reduce cost. The Attiny85 over usb can act as a Human Interface Device and any keypress or mouse press that your keyboard or mouse can make. 
+
+From Aliexpress Clone Prices:
+
+| Date         | Pro Micro (ATmega32U4)| Attiny85  | Difference | Attiny85 per one Pro Micro |
+| ------------ | --------------------- | --------- | ---------- | -------------------------- |
+| November 2019| $2.89                 | $1.07     | $1.82      | 2.7                        |
+| April 2022   | $6.5                  | $2.45     | $4.05      | 2.65                       |  
+
+From the table above (using personal Aliexpress order history data), when the Media Control Volume Knob guide was made in 2019 the cost difference between two popular microcontrollers with HID support was $1.82. Now 2.5 years later and the cost difference has doubled to $4.05. Without needed more pins (for example [remixes making a macro pad with volume control](https://www.printables.com/model/31773-macro-knob-and-keyboard)) the Attiny85 should be the right choice due to the recent chip price increases. 
 
 ## Hardware Required
+* [3D printed base and knob by Mikolas Zuza](https://blog.prusa3d.com/3d-print-an-oversized-media-control-volume-knob-arduino-basics_30184/)
 * Rotary Encoder
 * Attiny85
-* [3D printed base and knob by Mikolas Zuza](https://blog.prusa3d.com/3d-print-an-oversized-media-control-volume-knob-arduino-basics_30184/)
 
 ## Getting Started
 
@@ -23,10 +32,10 @@ An in-depth paragraph about your project and overview of use.
 ### Libaries Needed
 
 * [ClickEncoder by soligen2010](https://github.com/soligen2010/encoder "ClickEncoder by soligen2010")
-* [TimerOne](https://github.com/PaulStoffregen/TimerOne "TimerOne") import from github, import from libary manager didn't support Attiny85
-* [TrinketHidCombo](https://github.com/adafruit/Adafruit-Trinket-USB/tree/master/TrinketHidCombo "TrinketHidCombo")
+* [TimerOne by Paul Stoffrgen](https://github.com/PaulStoffregen/TimerOne "TimerOne") (import from github, import from library manager didn't support Attiny85)
+* [TrinketHidCombo by Adafruit](https://github.com/adafruit/Adafruit-Trinket-USB/tree/master/TrinketHidCombo "TrinketHidCombo")
 
-### Libary editting
+### Library editting
 To work with Arduino IDE 1.8.19 we have to edit some of the libaries.
 
 * Digistump Libaries: Go to C:\Users\[YourUserName]\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7, create a backup of the "libraries" folder (not in the same directory) and then delete the "libraries" folder. The v-usb files in Digitstump libaries causes conflict with v-usb files in TrinketHidCombo due to the Arduino IDE using the Digistump ones. (Fixes "Device Descriptor Request Failed" or "An unknown item was found in the report descriptor" Windows errors)
@@ -45,8 +54,45 @@ The Attiny85 has a smd LED connected to P1 that needs to be removed as it interf
 
 I recommend desoldering the right-angle header pins on the rotary encoder and either solder wires directly (or resolder right-angle header pins coming out from the bottom of the rotary encoder if using dupont wires) due to little space you have to connect wires when the rotary encoder is sitting flush with the 3D printed base. 
 
+## Wiring Diagram
+Pins P3, P4 for usb. P5 for reset. Some clones disable reset.
+
+## Media Control Knob Settings
+### ClickEncoder encoder settings
+* `encoder.setAccelerationEnabled(bool)` turns on or off acceleration. You can edit the acceleration speed settings in ClickEncoder.cpp
+* `encoder.setDoubleClickEncabled(bool)` turns on of off double clicking. You can edit the speed of double clicking in ClickEncoder.h
+
+### Attiny85MediaControlKnob.ino settings
+* `setHeldSingleAction = bool;` turns on "button held" sending a single keypress (single action) or off for sending repeated keypress (as if you were holding a key down on a normal keyboard.) You can edit the hold time before action in ClcikEncoder.h
+* `setMultipleKeySets = bool;` turns on being able to have mutilple key sets. In this project I use the double click to switch between keysets.
+
+### How to set keypress
+By default this project uses the Attiny85 to act as a usb keyboard to control media with mulitple keysets. 
+Keyset One (General media playback)
+* Single click: Media Play/Pause
+* Double click: Change Keyset
+* Hold: *singleaction* Left-Alt + M
+* Rotary Encoder Right: Media Volume Up
+* Rotart Encoder Left: Media Volume Down
+
+Keyset Two (Youtube)
+* Single click: Spacebar
+* Double click: Change Keyset
+* Hold: *singleaction* Left-Alt + M
+* Rotary Encoder Right: Right Arrow
+* Rotart Encoder Left: Left Arrow
+
+I recommend reading TrinketHidCombo.h to view the available functions and KEYCODES. I will provide a few examples below:
+```
+TrinketHidCombo.pressKey(modifiers, keycode1, keycode2,..,keycode5); // modifiers like Alt, Ctrl, Shift, etc. Can use with upto five keycodes
+TrinketHidCombo.pressKey(0,0);
+
+TrinketHidCombo.pressMultimediaKey(keycode); //Multi Media keys such as PlayPause, Volume, etc
+TrinketHidCombo.print("YourStringHere"); //Types out the string, great for debugging
+```
+
 ### usbconfig.h Settings (Changing device name and other rules)
-By default from the TrinketHidCombo libary, the Attiny85 will be progammed to be a HID device that is:
+By default from the TrinketHidCombo library, the Attiny85 will be progammed to be a HID device that is:
 * Vendor ID: 0x1782, Device ID: 0x24AB, which refers to a Vendor "Multiple Vendors" and unlisted Device ID.
 * Vendor name: Adafruit, Device name: Trinket HID Combo, what will show up on your computers (for example in Windows->settings->devices will show the device name.
 
@@ -74,3 +120,7 @@ command to run if program contains helper info
 
 Inspiration, code snippets, etc.
 * Add later
+
+## Misc Library Choice Disclaimers
+* HID Project doesn't support V-USB so no Attiny85 support
+* DigisparkKeyboard didn't support Multi Media Keys
