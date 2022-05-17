@@ -66,7 +66,7 @@ Pins P3, P4 for usb. P5 for reset. Some clones disable reset.
 * `setHeldSingleAction = bool;` turns on "button held" sending a single keypress (single action) or off for sending repeated keypress (as if you were holding a key down on a normal keyboard.) You can edit the hold time before action in ClcikEncoder.h
 * `setMultipleKeySets = bool;` turns on being able to have mutilple key sets. In this project I use the double click to switch between keysets.
 
-### How to set keypress
+### Default / Project Keysets
 By default this project uses the Attiny85 to act as a usb keyboard to control media with mulitple keysets. 
 Keyset One (General media playback)
 * Single click: Media Play/Pause
@@ -81,6 +81,8 @@ Keyset Two (Youtube)
 * Hold: *singleaction* Left-Alt + M
 * Rotary Encoder Right: Right Arrow
 * Rotart Encoder Left: Left Arrow
+
+### Changing key bindings
 
 I recommend reading TrinketHidCombo.h to view the available functions and KEYCODES. I will provide a few examples below:
 ```
