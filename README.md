@@ -1,6 +1,6 @@
 # Media Control Knob Attiny85
 A Attiny85 powering Printables (Prusaprints) Media Control Knob that can act as a HID (can act as keyboard or mouse)
-(If you are reading this, its still a work in progress)
+(Readme still work in progress + code needs a comment editing pass. But everything works and should be enough info you get you started)
 ## Description
 
 This project builds off of [Mikolas Zuza Media Control Volume Knob](https://blog.prusa3d.com/3d-print-an-oversized-media-control-volume-knob-arduino-basics_30184/) but using a Attiny85 to reduce cost. The Attiny85 over usb can act as a Human Interface Device and any keypress or mouse press that your keyboard or mouse can make. 
@@ -105,13 +105,6 @@ I don't believe that this is correct for the device desctription based on USB-IF
 So if you want to try to follow USB-IF standards then I encourge you to read [V-USB ID FAQ](https://github.com/obdev/v-usb/blob/master/usbdrv/USB-ID-FAQ.txt) and then [V-USB USB IDs for free](https://github.com/obdev/v-usb/blob/master/usbdrv/USB-IDs-for-free.txt) from the V-USB github. Following those guidelines, you can use Vendor ID 0x16c0 and Device ID based on your usecase. For example following the guidelines I used 0x27db for USB Keyboards (since only using common Keyboard keys in this project). Please note that the IDs are low byte first in usbconfig.h so using the Vendor ID, `#define  USB_CFG_DEVICE_ID       0xdb, 0x27` would be correct. 
 
 For name changing, simply edit the character array in usbconfig.h of USB_CFG_VENDOR_NAME and USB_CFG_DEVICE_NAME (following the guidelines above) and update the name lengths.
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
 
 ## Version History
 
