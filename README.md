@@ -55,7 +55,7 @@ The Attiny85 has a smd LED connected to P1 that needs to be removed as it interf
 I recommend desoldering the right-angle header pins on the rotary encoder and either solder wires directly (or resolder right-angle header pins coming out from the bottom of the rotary encoder if using dupont wires) due to little space you have to connect wires when the rotary encoder is sitting flush with the 3D printed base. 
 
 ## Wiring Diagram
-Pins P3, P4 for usb. P5 for reset. Some clones disable reset.
+![](Wiring.png)
 
 ## Media Control Knob Settings
 ### ClickEncoder encoder settings
