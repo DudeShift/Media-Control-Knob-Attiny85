@@ -57,6 +57,8 @@ I recommend desoldering the right-angle header pins on the rotary encoder and ei
 ## Wiring Diagram
 ![](Wiring.png)
 
+Note: P3 and P4 are used for USB HID and thus cannot be used as GPIO. P5 on official (non-clone) Attiny85 is a hardware reset and cannot be used as GPIO. You can however flash the bootloader (which some aliexpress clones already have) to disable that reset and allow P5 to be a GPIO. I did not test if my Attiny85s from Aliexpress for this and just used P1, P2, and P3 as shown.
+
 ## Media Control Knob Settings
 ### ClickEncoder encoder settings
 * `encoder.setAccelerationEnabled(bool)` turns on or off acceleration. You can edit the acceleration speed settings in ClickEncoder.cpp
